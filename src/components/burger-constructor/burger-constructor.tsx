@@ -11,6 +11,7 @@ import { useDispatch, useSelector } from '../../services/store';
 import { closeOrderModal, createOrder } from '../../services/slices/orderSlice';
 import { useNavigate } from 'react-router-dom';
 import { Modal } from '../modal';
+import { clearConstructor } from '../../services/slices/constructorSlice';
 
 export const BurgerConstructor: FC = () => {
   const dispatch = useDispatch();
@@ -41,7 +42,11 @@ export const BurgerConstructor: FC = () => {
       ...constructorItems.ingredients.map((item) => item._id),
       constructorItems.bun._id
     ];
-    dispatch(createOrder(ingredients));
+    dispatch(createOrder(ingredients))
+      .unwrap()
+      .then(() => {
+        dispatch(clearConstructor());
+      });
   };
   const handleCloseModal = () => {
     dispatch(closeOrderModal());
