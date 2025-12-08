@@ -11,38 +11,39 @@ import {
 import { fetchIngredients } from '../../services/slices/ingredientsSlice';
 
 export const IngredientDetails: FC = () => {
-  const params = useParams<{ id: string }>();
-  const id = params?.id || '';
+  const { id } = useParams<{ id: string }>();
   const dispatch = useDispatch();
   const ingredients = useSelector(selectIngredients);
   const loading = useSelector(selectIngredientsLoading);
   const error = useSelector(selectIngredientsError);
 
-  const ingredientData = ingredients.find((item) => item._id === id) || null;
+  // Ищем ингредиент только если id есть
+  const ingredientData = id
+    ? ingredients.find((item) => item._id === id)
+    : null;
+
   useEffect(() => {
-    if (id && ingredients.length === 0 && !loading && !error) {
+    // Если id есть, но ингредиент не найден и данные ещё не грузились — загружаем
+    if (id && !ingredientData && !loading && !error) {
       dispatch(fetchIngredients());
     }
-  }, [id, ingredients.length, loading, error, dispatch]);
+  }, [id, ingredientData, loading, error, dispatch]);
 
+  // Обработка ошибок и состояний
   if (error) {
-    return (
-      <div>
-        <p>Ошибка загрузки: {error}</p>
-      </div>
-    );
+    return <div>Ошибка загрузки: {error}</div>;
   }
 
-  if (!loading && !ingredientData) {
-    return (
-      <div>
-        <p>Ингредиент не найден</p>
-      </div>
-    );
+  if (!id) {
+    return <div>Ингредиент не указан</div>;
+  }
+
+  if (loading && !ingredientData) {
+    return <Preloader />;
   }
 
   if (!ingredientData) {
-    return <Preloader />;
+    return <div>Ингредиент не найден</div>;
   }
 
   return <IngredientDetailsUI ingredientData={ingredientData} />;
