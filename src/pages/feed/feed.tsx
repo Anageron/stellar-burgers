@@ -9,6 +9,7 @@ import {
   selectFeedLoading
 } from '../../services/selectors';
 import { fetchFeed } from '../../services/slices/feedSlice';
+import { Outlet } from 'react-router-dom';
 
 export const Feed: FC = () => {
   const dispatch = useDispatch();
@@ -38,5 +39,10 @@ export const Feed: FC = () => {
     dispatch(fetchFeed());
   };
 
-  return <FeedUI orders={orders} handleGetFeeds={handleGetFeeds} />;
+  return (
+    <>
+      <Outlet />
+      <FeedUI orders={orders} handleGetFeeds={handleGetFeeds} />;
+    </>
+  );
 };

@@ -9,6 +9,7 @@ import { Preloader } from '../../components/ui';
 import { FC, useEffect } from 'react';
 import { useDispatch } from '../../services/store';
 import { fetchIngredients } from '../../services/slices/ingredientsSlice';
+import { Outlet } from 'react-router-dom';
 
 export const ConstructorPage: FC = () => {
   const isIngredientsLoading = useSelector(selectIngredientsLoading);
@@ -28,6 +29,7 @@ export const ConstructorPage: FC = () => {
             Соберите бургер
           </h1>
           <div className={`${styles.main} pl-5 pr-5`}>
+            <Outlet />
             <BurgerIngredients />
             <BurgerConstructor />
           </div>
