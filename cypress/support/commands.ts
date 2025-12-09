@@ -1,21 +1,15 @@
 /// <reference types="cypress" />
 
-// ***********************************************
-// This example commands.ts shows you how to
-// create various custom commands and overwrite
-// existing commands.
-//
-// For more comprehensive examples of custom
-// commands please read more here:
-// https://on.cypress.io/custom-commands
-// ***********************************************
+Cypress.Commands.add('addIngredient', (ingredientId: string) => {
+  cy.get(`[data-cy="add-ingredient-${ingredientId}"]`).click();
+});
 
-declare global {
-  namespace Cypress {
-    interface Chainable {
-      // Add custom command types here if needed
-    }
-  }
-}
+Cypress.Commands.add('openIngredientModal', (type: string, id: string) => {
+  cy.get(`[data-cy="ingredient-${type}-${id}"]`).click();
+  cy.get('[data-cy="ingredient-modal"]').should('be.visible');
+});
 
-export {};
+Cypress.Commands.add('closeIngredientModal', () => {
+  cy.get('[data-cy="modal-close"]').click();
+  cy.get('[data-cy="ingredient-modal"]').should('not.exist');
+});

@@ -8,7 +8,7 @@ type feedState = {
   error: string | null;
 };
 
-const initialState: feedState = {
+export const initialState: feedState = {
   ordersData: null,
   loading: false,
   error: null
